@@ -1,0 +1,22 @@
+{
+  "name": "smarthabit",
+  "version": "1.0.0",
+  "description": "habit tracker app",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/klarcika/SmartHabit.git"
+  },
+  "keywords": [
+    "habit"
+  ],
+  "author": "Klara Kirbis, Elena Ugwoegbulam Bežan, Vivien Štampfer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/klarcika/SmartHabit/issues"
+  },
+  "homepage": "https://github.com/klarcika/SmartHabit#readme"
+}
