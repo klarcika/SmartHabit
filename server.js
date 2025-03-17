@@ -5,6 +5,8 @@ const path = require('path');
 const server = http.createServer((req, res) => {
     if (req.url === '/funkcionalnosti-odjemalca/') {
         serveHTML(res, 'funkcionalnosti-odjemalca.html');
+    } else if (req.url === '/uml_slika/') {
+        serveImage(res, 'uml_st.png');
     } else if (req.url === '/posebnosti/') {
         serveText(res, 'posebnosti.txt');
     } else if (req.url === '/podatkovni-model/') {
@@ -46,7 +48,35 @@ function serveText(res, filename) {
     });
 }
 
-// tu je se treba za slike dodat, da jih bo znal prikazat
+function serveImage(res, filename) {
+    const filePath = path.join(__dirname, "pages", filename);
+    const ext = path.extname(filename).toLowerCase();
+    const contentType = {
+        '.jpg': 'image/jpeg',
+        '.jpeg': 'image/jpeg',
+        '.png': 'image/png',
+        '.gif': 'image/gif',
+        '.webp': 'image/webp'
+    }[ext] || 'application/octet-stream';
+
+    fs.readFile(filePath, (err, data) => {
+        if (err) {
+            res.writeHead(404, { 'Content-Type': 'text/plain' });
+            res.end('Slika ni bila najdena.');
+        } else {
+            res.writeHead(200, { 'Content-Type': contentType });
+            res.end(data);
+        }
+    });
+}
+
+server.on('request', (req, res) => {
+    if (req.url.startsWith('/images/') || req.url.startsWith('/pages/')) {
+        serveImage(res, req.url.replace('/', ''));
+    }
+});
+
+
 
 server.listen(3000, () => {
     console.log('Strežnik teče na http://localhost:3000');
