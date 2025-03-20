@@ -5,8 +5,12 @@ const path = require('path');
 const server = http.createServer((req, res) => {
     if (req.url === '/funkcionalnosti-odjemalca/') {
         serveHTML(res, 'funkcionalnosti-odjemalca.html');
+    } else if (req.url === '/uml_streznik/') {
+        serveImage(res, 'uml_streznik.png');
     } else if (req.url === '/uml_slika/') {
-        serveImage(res, 'uml_st.png');
+    serveImage(res, 'uml_st.png');
+    } else if (req.url === '/posebnosti-streznika/') {
+        serveText(res, 'posebnosti-streznika.txt');
     } else if (req.url === '/posebnosti/') {
         serveText(res, 'posebnosti.txt');
     } else if (req.url === '/podatkovni-model/') {

@@ -1,0 +1,17 @@
+Tehnične zahteve strežnika:
+
+1. Podatkovna baza:
+    - Za shranjevanje podatkov bomo uporabljali MongoDB, ki omogoča fleksibilno in hitro obdelavo podatkov.
+    - V bazi bodo shranjeni podatki o uporabnikih, njihovih navadah, dosežkih in priporočilih umetne inteligence.
+
+2. Backend tehnologija:
+    - Backend bo implementiran s pomočjo NestJS ali Express.js
+    - REST API bo zagotavljal varno komunikacijo med odjemalcem in strežnikom.
+
+3. Varnost in zaščita podatkov
+    - Za avtentikacijo uporabnikov bomo uporabljali JWT (JSON Web Token), ki omogoča varno prijavo in dostop do zaščitenih vsebin.
+    - Vsi občutljivi podatki, kot so gesla, bodo šifrirani, kar bo zagotovilo dodatno zaščito.
+
+4. Umetna inteligenca (AI) in analiza
+    - Strežnik bo izvajal osnovne analize uporabniških podatkov, da bo generiral personalizirana priporočila za izboljšanje navad.
+    - AI bo analiziral vzorce uporabe in prilagajal predloge glede na napredek posameznega uporabnika.
