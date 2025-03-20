@@ -1,0 +1,39 @@
+REST API za SmartHabit podpira naslednje operacije:
+
+1. Uporabniki
+   - POST /api/uporabniki - Ustvari novega uporabnika
+   - GET /api/uporabniki/{id} - Pridobi podatke o določenem uporabniku
+   - PUT /api/uporabniki/{id} - Posodobi podatke o uporabniku
+   - DELETE /api/uporabniki/{id} - Izbriše uporabnika
+
+2. Navade
+   - POST /api/navade - Ustvari novo navado
+   - GET /api/navade/{id} - Pridobi podatke o določeni navadi
+   - PUT /api/navade/{id} - Posodobi navado
+   - DELETE /api/navade/{id} - Izbriše navado
+   - GET /api/navade?uporabnik={id}` - Pridobi vse navade določenega uporabnika
+
+3. Napredek
+   - POST /api/napredek - Zabeleži nov vnos napredka
+   - GET /api/napredek/{navada_id} - Pridobi vse vnose napredka za določeno navado
+   - PUT /api/napredek/{id}` - Posodobi zapis napredka
+   - DELETE /api/napredek/{id}` - Izbriše zapis napredka
+
+4. Obvestila
+   - GET /api/obvestila?uporabnik={id}` - Pridobi vsa obvestila uporabnika
+   - POST /api/obvestila` - Pošlji novo obvestilo uporabniku
+   - DELETE /api/obvestila/{id}` - Izbriše določeno obvestilo
+
+5. Dosežki
+   - GET /api/dosezki?uporabnik={id}` - Pridobi vse dosežke uporabnika
+   - POST /api/dosezki - Dodeli nov dosežek uporabniku
+   - DELETE /api/dosezki/{id} - Izbriše dosežek
+
+6. Sinhronizacija
+   - GET /api/sinhronizacija/{uporabnik_id} - Pridobi zadnje podatke za uporabnika
+   - POST /api/sinhronizacija/{uporabnik_id} - Pošlje podatke za sinhronizacijo na strežnik
+
+Hibridna aplikacija bo:
+- Dostopala do podatkov o uporabnikih, navadah, napredku in obvestilih preko API-ja.
+- Samodejno sinhronizirala podatke med lokalno napravo in strežnikom.
+

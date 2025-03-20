@@ -15,8 +15,8 @@ const server = http.createServer((req, res) => {
         serveText(res, 'posebnosti.txt');
     } else if (req.url === '/podatkovni-model/') {
         serveHTML(res, 'podatkovni-model.html');
-    } else if (req.url === '/REST/') {
-        serveText(res, 'REST.txt');
+    } else if (req.url === '/posebnosti-ER/') {
+        serveText(res, 'posebnosti-ER.txt');
     } else if (req.url === '/funkcionalnosti-streznika/') {
         serveHTML(res, 'funkcionalnosti-streznika.html');
     } else if (req.url === '/er-smarthabit.png') {
