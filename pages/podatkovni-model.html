@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="sl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Podatkovni model - SmartHabit</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; }
+        h1, h2 { color: #2c3e50; }
+        ul { list-style-type: square; }
+        img { max-width: 100%; height: auto; border: 1px solid #ccc; padding: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Podatkovni model za SmartHabit</h1>
+    
+    <h2>Glavne entitete</h2>
+    <ul>
+        <li><strong>Uporabnik</strong>: ID, ime, email, geslo, registriran</li>
+        <li><strong>Navada</strong>: ID, uporabnik_ID, ime, tip navade</li>
+        <li><strong>Napredek</strong>: ID, navada_ID, datum, stanje (uspešno, neuspešno, v teku), točke</li>
+        <li><strong>Obvestilo</strong>: ID, uporabnik_ID, vrsta, vsebina, poslano</li>
+        <li><strong>Dosežek</strong>: ID, uporabnik_ID, naziv, datum pridobitve, skupne točke</li>
+    </ul>
+
+    <h2>Relacije med entitetami</h2>
+    <p>Uporabnik ima več navad, vsaka navada ima več zapisov o napredku. Uporabnik lahko prejema obvestila in dosega nagrade.</p>
+    
+    <h2>Sinhronizacija podatkov</h2>
+    <ul>
+        <li><strong>Vedno na napravi</strong>: Uporabniški podatki (ID, ime), lokalne nastavitve.</li>
+        <li><strong>Samo na strežniku</strong>: Vsi podatki o obvestilih in nagradah.</li>
+        <li><strong>Sinhronizacija</strong>: Napredki pri navadah (ob vsakem zapisu napredka), točke in dosežki (ob določenih rokih).</li>
+    </ul>
+    
+    <h2>ER diagram</h2>
+    <img src="/er-smarthabit.png" alt="ER diagram SmartHabit" width="600">
+</body>
+</html>

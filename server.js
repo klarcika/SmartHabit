@@ -5,7 +5,7 @@ const path = require('path');
 const server = http.createServer((req, res) => {
     if (req.url === '/funkcionalnosti-odjemalca/') {
         serveHTML(res, 'funkcionalnosti-odjemalca.html');
-    } else if (req.url === '/uml_slika/') {
+    } else if (req.url === '/uml_st.png') {
         serveImage(res, 'uml_st.png');
     } else if (req.url === '/posebnosti/') {
         serveText(res, 'posebnosti.txt');
@@ -15,6 +15,8 @@ const server = http.createServer((req, res) => {
         serveText(res, 'REST.txt');
     } else if (req.url === '/funkcionalnosti-streznika/') {
         serveHTML(res, 'funkcionalnosti-streznika.html');
+    } else if (req.url === '/er-smarthabit.png') {
+        serveImage(res, 'er-smarthabit.png');
     } else {
         res.writeHead(404, { 'Content-Type': 'text/plain' });
         res.end('404 - Stran ni najdena');
