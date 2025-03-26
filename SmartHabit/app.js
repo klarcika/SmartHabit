@@ -31,6 +31,10 @@ app.listen(port, () => {
 
 
 app.use('/', indexRouter);
+app.use('/api/uporabniki', require('./routes/uporabniki'));
+app.use('/api/napredek', require('./routes/napredek'));
+app.use('/api/obvestila', require('./routes/obvestila'));
+app.use('/api/dosezki', require('./routes/dosezki'));
 
 
 module.exports = app;
