@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1742993738248,
+    "name": "NewHabit",
+    "description": "this is a test habit",
+    "frequency": "weekly"
+  },
+  {
+    "id": 1742993804122,
+    "name": "Scincare",
+    "description": "Do your daily skincare",
+    "frequency": "daily"
+  },
+  {
+    "id": 1742993838499,
+    "name": "Workout",
+    "description": "Move your body and go to the gym!",
+    "frequency": "weekly"
+  },
+  {
+    "id": 1742993871362,
+    "name": "Read",
+    "description": "Go read and stop watching the damn phone",
+    "frequency": "daily"
+  },
+  {
+    "id": 1742993899819,
+    "name": "Walk",
+    "description": "Go on a walk. it does not need to be long, just go out.",
+    "frequency": "daily"
+  }
+]
