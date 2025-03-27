@@ -8,8 +8,9 @@ const bodyParser = require('body-parser');
 
 var indexRouter = require('./routes/habits');
 
+// Ni delovalo na 3000, zato sem spremnila na 3001, če vama ne bo delalo spremenita nazaj na 3000 tako kot je bilo prej
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 
 app.use(logger('dev'));
 app.use(cors());
@@ -35,6 +36,9 @@ app.use('/api/uporabniki', require('./routes/uporabniki'));
 app.use('/api/napredek', require('./routes/napredek'));
 app.use('/api/obvestila', require('./routes/obvestila'));
 app.use('/api/dosezki', require('./routes/dosezki'));
+app.use('/api/settings', require('./routes/settings'));
+app.use('/api/recommendations', require('./routes/recommendations'));
+
 
 
 module.exports = app;

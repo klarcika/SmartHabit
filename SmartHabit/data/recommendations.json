@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1,
+    "userId": 1123,
+    "recommendation": "Increase exercise frequency",
+    "createdAt": "2025-03-26"
+  },
+  {
+    "id": 2,
+    "userId": 1124,
+    "recommendation": "Drink more water daily",
+    "createdAt": "2025-03-25"
+  }
+]
