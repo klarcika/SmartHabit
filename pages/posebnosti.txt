@@ -1,6 +1,0 @@
- "Tehnične zahteve aplikacije SmartHabit:
-"1. **Tehnologije**: Aplikacija bo implementirana kot progresivna spletna aplikacija (PWA), uporabljala bo HTML, CSS in JavaScript z uporabo Node.js za strežniški del." +
-"2. **Lokalno shranjevanje**: Podatki o navadah bodo shranjeni v brskalnik (IndexedDB) za delovanje brez povezave." 
-"3. **AI in analitika**: Umetna inteligenca za prilagojene nasvete bo uporabljala TensorFlow.js." +
-"4. **Povezljivost**: Aplikacija bo uporabljala REST API za sinhronizacijo podatkov med napravo in strežnikom." +
-"5. **Naprave**: Deluje na vseh napravah z modernim brskalnikom, brez potrebe po posebnih senzorjih."
