@@ -21,6 +21,7 @@
 ---
 
 ## 📁 Struktura projekta
+```bash
 📁 frontend/
 │
 ├── index.html
@@ -42,6 +43,7 @@
 │ └── balorangeoon.jpg
 ├── manifest.json
 └── serviceWorker.js
+```
 ------
 
 ## 🛠️ Zagon aplikacije
