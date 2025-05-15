@@ -50,18 +50,21 @@
 
 ```bash
 json-server --watch db.json --port 3001
-
+```
 ### 2. Backend (npr. Live server ali http server)
+```bash
 npx http-server . -p 5500
-
+```
 ### Odpri aplikavijo v brskalniku
+```bash
 http://localhost:5500/pages/home.html
-
+```
 ## 🌐 Progressive Web App
 Manifest (manifest.json) vsebuje vse potrebne podatke o aplikaciji
 Ikone za namestitev na napravo
 Aplikacija se lahko doda na začetni zaslon (mobilni ali namizni sistem)
 Service Worker predpomni pomembne statične datoteke za delovanje brez povezave
+
 ## 📦 Delovanje brez povezave
 - Če ni povezave z internetom, se navade shranijo v localStorage
 -Ob ponovni vzpostavitvi povezave se podatki avtomatsko pošljejo na backend
