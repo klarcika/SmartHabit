@@ -62,14 +62,14 @@ npx http-server . -p 5500
 http://localhost:5500/pages/home.html
 ```
 ## 🌐 Progressive Web App
-Manifest (manifest.json) vsebuje vse potrebne podatke o aplikaciji
-Ikone za namestitev na napravo
-Aplikacija se lahko doda na začetni zaslon (mobilni ali namizni sistem)
-Service Worker predpomni pomembne statične datoteke za delovanje brez povezave
+- Manifest (manifest.json) vsebuje vse potrebne podatke o aplikaciji
+- Ikone za namestitev na napravo
+- Aplikacija se lahko doda na začetni zaslon (mobilni ali namizni sistem)
+- Service Worker predpomni pomembne statične datoteke za delovanje brez povezave
 
 ## 📦 Delovanje brez povezave
 - Če ni povezave z internetom, se navade shranijo v localStorage
--Ob ponovni vzpostavitvi povezave se podatki avtomatsko pošljejo na backend
+- Ob ponovni vzpostavitvi povezave se podatki avtomatsko pošljejo na backend
 
 ## 🔔 Obvestila
 - Aplikacija uporablja Notification API
