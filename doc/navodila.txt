@@ -1,0 +1,7 @@
+Zaganjanje frontenda:
+    - cd frontend
+    - npm start
+
+Zaganjanje backenda:
+    - cd backend
+    - node ./bin/www
