@@ -2,6 +2,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const mongoose = require('mongoose');
 require('dotenv').config();
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -25,6 +26,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 const habitsRoutes = require('./routes/habits');
 app.use('/habits', habitsRoutes);
 
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log('Povezava z MongoDB Atlas uspešna'))
+  .catch(err => console.error('Napaka pri povezavi:', err));
+
 // Zaženi strežnik
 app.listen(port, () => {
     console.log(`✅ SmartHabit strežnik teče na http://localhost:${port}`);
@@ -38,7 +43,6 @@ app.use('/api/obvestila', require('./routes/obvestila'));
 app.use('/api/dosezki', require('./routes/dosezki'));
 app.use('/api/settings', require('./routes/settings'));
 app.use('/api/recommendations', require('./routes/recommendations'));
-
 
 
 module.exports = app;
