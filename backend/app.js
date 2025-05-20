@@ -9,7 +9,6 @@ const bodyParser = require('body-parser');
 
 var indexRouter = require('./routes/habits');
 
-// Ni delovalo na 3000, zato sem spremnila na 3001, če vama ne bo delalo spremenita nazaj na 3000 tako kot je bilo prej
 const app = express();
 const port = process.env.PORT || 3001;
 

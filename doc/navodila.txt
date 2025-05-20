@@ -1,6 +1,6 @@
 Zaganjanje frontenda:
     - cd frontend
-    - npm start
+    - npm run dev
 
 Zaganjanje backenda:
     - cd backend
