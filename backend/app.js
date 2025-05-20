@@ -1,47 +1,26 @@
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
-const mongoose = require('mongoose');
-require('dotenv').config();
 const cors = require('cors');
-const bodyParser = require('body-parser');
-
-var indexRouter = require('./routes/habits');
+const express = require('express');
+const mongoose = require('mongoose');
+const userRoutes = require('./routes/user.routes');
+require('dotenv').config();
 
 const app = express();
-const port = process.env.PORT || 3001;
 
-app.use(logger('dev'));
-app.use(cors());
-app.use(bodyParser.json());
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true,
+}));
+
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+.then(() => console.log('Povezano z MongoDB'))
+.catch((err) => console.error('Napaka pri povezavi z MongoDB', err));
 
-// Naloži route
-const habitsRoutes = require('./routes/habits');
-app.use('/habits', habitsRoutes);
+app.use('/api/users', userRoutes);
 
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('Povezava z MongoDB Atlas uspešna'))
-  .catch(err => console.error('Napaka pri povezavi:', err));
-
-// Zaženi strežnik
-app.listen(port, () => {
-    console.log(`✅ SmartHabit strežnik teče na http://localhost:${port}`);
-});
-
-
-app.use('/', indexRouter);
-app.use('/api/uporabniki', require('./routes/uporabniki'));
-app.use('/api/napredek', require('./routes/napredek'));
-app.use('/api/obvestila', require('./routes/obvestila'));
-app.use('/api/dosezki', require('./routes/dosezki'));
-app.use('/api/settings', require('./routes/settings'));
-app.use('/api/recommendations', require('./routes/recommendations'));
-
-
-module.exports = app;
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => console.log(`Strežnik teče na ${PORT}`));

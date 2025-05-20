@@ -4,4 +4,4 @@ Zaganjanje frontenda:
 
 Zaganjanje backenda:
     - cd backend
-    - node ./bin/www
+    - node app.js
