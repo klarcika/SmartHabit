@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useAuth, useUser } from '@clerk/clerk-react';
 import axios from 'axios';
+import { FaUser, FaDatabase } from 'react-icons/fa';
+import './ProfilePage.css';
 
 function ProfilePage() {
   const { getToken, isSignedIn } = useAuth();
@@ -30,11 +32,27 @@ function ProfilePage() {
   }, [isSignedIn]);
 
   return (
-    <div>
-      <h2>Profilna stran</h2>
+    <div className="page-wrapper">
+      <div className="profile-container">
+        {user?.imageUrl && (
+          <img src={user.imageUrl} alt="Profilna slika" className="avatar" />
+        )}
 
-      <p>Podatki iz Clerk-a: {user?.firstName} {user?.lastName}</p>
+        <h2><FaUser className="icon" /> Profilna stran</h2>
 
+        <p><strong>Ime:</strong> {user?.firstName} {user?.lastName}</p>
+
+      {userData && (
+  <div className="api-data">
+    <h3><FaDatabase className="icon" /> Podatki iz API-ja</h3>
+    <p><strong>ID:</strong> {userData._id}</p>
+    <p><strong>Clerk ID:</strong> {userData.clerkId}</p>
+    <p><strong>Email:</strong> {userData.email}</p>
+    <p><strong>Ime:</strong> {userData.name}</p>
+    <p><strong>Ustvarjeno:</strong> {new Date(userData.createdAt).toLocaleString('sl-SI')}</p>
+  </div>
+)}
+      </div>
     </div>
   );
 }
