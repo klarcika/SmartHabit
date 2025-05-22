@@ -38,7 +38,7 @@ function ProfilePage() {
           <img src={user.imageUrl} alt="Profilna slika" className="avatar" />
         )}
 
-        <h2><FaUser className="icon" /> Profilna stran</h2>
+        <h2><FaUser className="icon"/> Profilna stran</h2>
 
         <p><strong>Ime:</strong> {user?.firstName} {user?.lastName}</p>
 

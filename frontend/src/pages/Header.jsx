@@ -16,6 +16,7 @@ function Header() {
 
         <nav className="navbar-section navbar-center">
           <Link to="/" className={location.pathname === '/' ? 'active' : ''}>Domov</Link>
+          <Link to="/habits" className={location.pathname === '/habits' ? 'active' : ''}>Navade</Link>
           <Link to="/profile" className={location.pathname === '/profile' ? 'active' : ''}>Profil</Link>
         </nav>
 
