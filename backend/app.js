@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const userRoutes = require('./routes/user.routes');
 const habitRoutes = require('./routes/habit.routes');
+const achievementRoutes = require('./routes/achievement.routes');
 require('dotenv').config();
 
 const app = express();
@@ -23,6 +24,7 @@ mongoose.connect(process.env.MONGO_URI, {
 
 app.use('/api/users', userRoutes);
 app.use('/api/habits', habitRoutes);
+app.use('/api/achievements', achievementRoutes);
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`Strežnik teče na ${PORT}`));
