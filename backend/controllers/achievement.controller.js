@@ -1,5 +1,7 @@
 const Achievement = require('../models/Achievement');
 const Habit = require('../models/Habit');
+const Milestone = require('../models/Milestone');
+
 
 const createAchievement = async (req, res) => {
   const { habit, value } = req.body;
@@ -22,6 +24,31 @@ const createAchievement = async (req, res) => {
     });
 
     await Habit.findByIdAndUpdate(habit, { $inc: { points: value } });
+
+    const updatedHabit = await Habit.findById(habit);
+
+    if (updatedHabit) {
+      const existingMilestones = await Milestone.find({ user: userId, habit: updatedHabit._id });
+      const types = existingMilestones.map(m => m.type);
+
+      // Če še ni 'half' in je vsaj 50 %
+      if (updatedHabit.points >= updatedHabit.goal / 2 && !types.includes('half')) {
+        await Milestone.create({
+          user: userId,
+          habit: updatedHabit._id,
+          type: 'half'
+        });
+      }
+
+      // Če še ni 'full' in je vsaj 100 %
+      if (updatedHabit.points >= updatedHabit.goal && !types.includes('full')) {
+        await Milestone.create({
+          user: userId,
+          habit: updatedHabit._id,
+          type: 'full'
+        });
+      }
+    }
 
     res.status(201).json(newAchievement);
   } catch (err) {
