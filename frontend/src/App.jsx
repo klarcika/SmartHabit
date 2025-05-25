@@ -3,6 +3,8 @@ import HomePage from './pages/HomePage';
 import ProfilePage from './pages/ProfilePage';
 import Header from "./pages/header.jsx";
 import Habits from "./pages/Habits.jsx";
+import Achievements from "./pages/Achivement.jsx";
+import Milestone from "./pages/Milestone.jsx";
 
 
 
@@ -15,6 +17,8 @@ function App() {
       <Route path="/" element={<HomePage />} />
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/habits" element={<Habits/>} />
+      <Route path="/milestone" element={<Milestone/>} />
+      <Route path="/achivements" element={<Achievements/>} />
     </Routes>
   </div>
 </Router>
