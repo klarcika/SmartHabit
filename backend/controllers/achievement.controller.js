@@ -4,11 +4,11 @@ const Milestone = require('../models/Milestone');
 
 
 const createAchievement = async (req, res) => {
-  const { habit, value } = req.body;
+  const { habit } = req.body;
   const userId = req.clerkId;
 
-  if (!habit || !value) {
-    return res.status(400).json({ message: 'Manjkajo podatki: habit ali value' });
+  if (!habit) {
+    return res.status(400).json({ message: 'Manjka ID navade' });
   }
 
   try {
@@ -16,6 +16,8 @@ const createAchievement = async (req, res) => {
     if (!habitDoc) {
       return res.status(404).json({ message: 'Navada ni bila najdena ali ne pripada uporabniku' });
     }
+
+    const value = 1;
 
     const newAchievement = await Achievement.create({
       habit,
