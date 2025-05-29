@@ -39,7 +39,7 @@
 
 .habit-card {
     padding: 16px;
-    border: 2px solid #ffffff; /* White border to separate cards */
+    border: 2px solid #ffffff;
     border-radius: 8px;
     background-color: #000000;
     color: #ffffff;
@@ -53,14 +53,14 @@
 }
 
 .habit-card h3 {
-    font-size: 20px;
+    font-size: 18px;
     font-weight: 600;
     margin-bottom: 8px;
     color: #ffffff;
 }
 
 .habit-card p {
-    font-size: 18px;
+    font-size: 14px;
     color: #ffffff;
     margin: 4px 0;
 }
@@ -75,28 +75,28 @@
     padding: 6px 12px;
     border: none;
     border-radius: 4px;
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 500;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
 .edit-button {
-    background-color: #f59e0b; /* Yellow for edit */
+    background-color: #f59e0b;
     color: #ffffff;
 }
 
 .edit-button:hover {
-    background-color: #d97706; /* Darker yellow on hover */
+    background-color: #d97706;
 }
 
 .delete-button {
-    background-color: #dc2626; /* Red for delete */
+    background-color: #dc2626;
     color: #ffffff;
 }
 
 .delete-button:hover {
-    background-color: #b91c1c; /* Darker red on hover */
+    background-color: #b91c1c;
 }
 
 /* Add button styling */
@@ -117,6 +117,30 @@
 
 .add-habit-button:hover {
     background-color: #1d4ed8;
+}
+
+/* Filter styling */
+.filter-container {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.filter-container label {
+    font-weight: 500;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.filter-container select {
+    padding: 8px;
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 16px;
+    color: #000000;
+    background-color: #d1d5db;
+    width: 200px;
 }
 
 /* Modal styling */
@@ -167,8 +191,8 @@
     border: 1px solid #d1d5db;
     border-radius: 4px;
     font-size: 20px;
-    color: #000000;
-    background-color: #ffffff;
+    color: #ffffff;
+    background-color: #d1d5db;
 }
 
 .modal-form .button-container {

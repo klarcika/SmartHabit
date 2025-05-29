@@ -12,6 +12,7 @@ function Habit() {
     const [error, setError] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [currentHabit, setCurrentHabit] = useState(null);
+    const [filterCategory, setFilterCategory] = useState(''); // State for category filter
     const userId = user?.id;
 
     useEffect(() => {
@@ -53,7 +54,6 @@ function Habit() {
         try {
             let response;
             if (isEditing) {
-                // Update existing habit
                 response = await axios.put(`http://localhost:4000/api/habits/${currentHabit._id}`, newHabitData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -62,7 +62,6 @@ function Habit() {
                 });
                 setHabits(habits.map((habit) => (habit._id === currentHabit._id ? response.data : habit)));
             } else {
-                // Add new habit
                 response = await axios.post("http://localhost:4000/api/habits", newHabitData, {
                     headers: {
                         Authorization: `Bearer ${token}`,
@@ -115,16 +114,40 @@ function Habit() {
         setError(null);
     };
 
+    // Filter habits based on selected category
+    const filteredHabits = filterCategory
+        ? habits.filter((habit) => habit.category === filterCategory)
+        : habits;
+
     return (
         <div className="habit-page-wrapper">
             <div className="habit-container">
                 <h2><FaListAlt className="icon" /> Moje navade</h2>
                 <button className="add-habit-button" onClick={() => setIsModalOpen(true)}>Dodaj navado</button>
-                {habits.length === 0 ? (
+
+                {/* Filter dropdown */}
+                <div className="filter-container">
+                    <label htmlFor="filter-category">Filtriraj po kategoriji:</label>
+                    <select
+                        id="filter-category"
+                        value={filterCategory}
+                        onChange={(e) => setFilterCategory(e.target.value)}
+                    >
+                        <option value="">Vse kategorije</option>
+                        <option value="health">Zdravje</option>
+                        <option value="learning">Učenje</option>
+                        <option value="finance">Finance</option>
+                        <option value="social">Socialno</option>
+                        <option value="household">Domača opravila</option>
+                        <option value="other">Drugo</option>
+                    </select>
+                </div>
+
+                {filteredHabits.length === 0 ? (
                     <p>Ni navad za prikaz.</p>
                 ) : (
                     <div className="habit-list">
-                        {habits.map((habit) => (
+                        {filteredHabits.map((habit) => (
                             <div key={habit._id} className="habit-card">
                                 <div className="habit-card-content">
                                     <h3>{habit.name}</h3>
@@ -184,7 +207,7 @@ function Habit() {
                                 id="goal"
                                 name="goal"
                                 required
-                                placeholder="npr. ohrani sobo čisto"
+                                placeholder="npr. kolikokrat želiš to izvesti (število)"
                                 defaultValue={isEditing ? currentHabit?.goal : ''}
                             />
 
