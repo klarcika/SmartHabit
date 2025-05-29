@@ -19,6 +19,7 @@ function Header() {
           <Link to="/habits" className={location.pathname === '/habits' ? 'active' : ''}>Navade</Link>
           <Link to="/milestone" className={location.pathname === '/milestone' ? 'active' : ''}>Milestone</Link>
           <Link to="/achivements" className={location.pathname === '/achivements' ? 'active' : ''}>Dosežki</Link>
+          <Link to="/leaderboard" className={location.pathname === '/leaderboard' ? 'active' : ''}>Leaderboard</Link> {/* ⬅️ Dodano */}
           <Link to="/profile" className={location.pathname === '/profile' ? 'active' : ''}>Profil</Link>
         </nav>
 

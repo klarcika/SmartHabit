@@ -5,6 +5,8 @@ const userRoutes = require('./routes/user.routes');
 const habitRoutes = require('./routes/habit.routes');
 const achievementRoutes = require('./routes/achievement.routes');
 const milestoneRoutes = require('./routes/milestone.routes');
+const leaderboardRoutes = require('./routes/leaderboard');
+
 require('dotenv').config();
 
 const app = express();
@@ -27,6 +29,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/habits', habitRoutes);
 app.use('/api/achievements', achievementRoutes);
 app.use('/api/milestones', milestoneRoutes);
+app.use('/api/leaderboard', leaderboardRoutes);
 
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => console.log(`Strežnik teče na ${PORT}`));
