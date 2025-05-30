@@ -147,7 +147,7 @@ function ProfilePage() {
               <div className="api-data">
                 <h3><FaDatabase className="icon" /> Podatki iz API-ja</h3>
                 <p><strong>Email:</strong> {userData.email}</p>
-                <p><strong>Uporabniško me:</strong> {userData.name}</p>
+                <p><strong>Uporabniško ime:</strong> {userData.name}</p>
                 <p><strong>Ustvarjeno:</strong> {new Date(userData.createdAt).toLocaleString('sl-SI')}</p>
               </div>
           )}

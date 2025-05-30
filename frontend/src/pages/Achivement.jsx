@@ -1,51 +1,106 @@
 import React, { useEffect, useState } from 'react';
 import { useAuth } from '@clerk/clerk-react';
 import axios from 'axios';
-import './Habits.css'; // Reuse existing styles
+import './Habits.css';
+import './Achivement.css';
+import { FaAward } from 'react-icons/fa';
 
 function Achievements() {
     const { getToken, isSignedIn } = useAuth();
     const [achievements, setAchievements] = useState([]);
+    const [habits, setHabits] = useState([]);
+    const [progressByHabit, setProgressByHabit] = useState({});
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        const fetchAchievements = async () => {
-            if (!isSignedIn) return;
-
-            const token = await getToken();
-
-            try {
-                const response = await axios.get("http://localhost:4000/api/achievements", {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
-
-                setAchievements(response.data);
-            } catch (error) {
-                console.error("Napaka pri pridobivanju dosežkov:", error);
-                setError("Napaka pri pridobivanju dosežkov. Poskusite znova.");
-            }
-        };
-
-        fetchAchievements();
+        if (!isSignedIn) return;
+        fetchData();
     }, [isSignedIn]);
+
+    const fetchData = async () => {
+        const token = await getToken();
+
+        try {
+            const habitsResponse = await axios.get("http://localhost:4000/api/habits", {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            setHabits(habitsResponse.data);
+
+            const achievementsResponse = await axios.get("http://localhost:4000/api/achievements", {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            setAchievements(achievementsResponse.data);
+
+            const today = new Date().toISOString().split('T')[0];
+            const progressMap = {};
+            achievementsResponse.data.forEach(a => {
+                const date = new Date(a.date).toISOString().split('T')[0];
+                if (date === today) {
+                    progressMap[a.habit._id] = a._id;
+                }
+            });
+            setProgressByHabit(progressMap);
+        } catch (error) {
+            console.error("Napaka pri nalaganju podatkov:", error);
+            setError("Napaka pri pridobivanju podatkov.");
+        }
+    };
+
+    const handleAddProgress = async (habitId) => {
+        const token = await getToken();
+        try {
+            const response = await axios.post("http://localhost:4000/api/achievements", {
+                habit: habitId
+            }, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            await fetchData();
+        } catch (error) {
+            console.error("Napaka pri dodajanju napredka:", error);
+        }
+    };
+
+    const handleRemoveProgress = async (achievementId) => {
+        const token = await getToken();
+        try {
+            await axios.delete(`http://localhost:4000/api/achievements/${achievementId}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            await fetchData();
+        } catch (error) {
+            console.error("Napaka pri odstranjevanju napredka:", error);
+        }
+    };
 
     return (
         <div className="habit-page-wrapper">
             <div className="habit-container">
-                <h2>Dosežki</h2>
+                <h2><FaAward className="icon" /> Moji napredki</h2>
                 {error && <p style={{ color: 'red' }}>{error}</p>}
-                {achievements.length === 0 ? (
-                    <p>Ni dosežkov za prikaz.</p>
+
+                {habits.length === 0 ? (
+                    <p>Ni navad za prikaz.</p>
                 ) : (
                     <div className="habit-list">
-                        {achievements.map((achievement) => (
-                            <div key={achievement._id} className="habit-card">
+                        {habits.map(habit => (
+                            <div key={habit._id} className="habit-card">
                                 <div className="habit-card-content">
-                                    <p><strong>Navada:</strong> {achievement.habit}</p>
-                                    <p><strong>Datum:</strong> {new Date(achievement.date).toLocaleString('sl-SI')}</p>
-                                    <p><strong>Vrednost:</strong> {achievement.value}</p>
+                                    <h3>{habit.name}</h3>
+                                    <p><strong>Napredek:</strong> {habit.points} / {habit.goal}</p>
+
+                                </div>
+                                <div className="habit-card-buttons">
+                                    {progressByHabit[habit._id] ? (
+                                        <>
+                                            <button className="delete-button" onClick={() => handleRemoveProgress(progressByHabit[habit._id])}>Odstrani napredek</button>
+                                            <button className="disabled-button" disabled>Doseženo danes</button>
+                                        </>
+                                    ) : (
+                                        <button className="add-button" onClick={() => handleAddProgress(habit._id)}>Beleži napredek</button>
+                                    )}
                                 </div>
                             </div>
                         ))}

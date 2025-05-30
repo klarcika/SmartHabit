@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import ProfilePage from './pages/ProfilePage';
-import Header from "./pages/header.jsx";
+import Header from "./pages/Header.jsx";
 import Habits from "./pages/Habits.jsx";
 import Achievements from "./pages/Achivement.jsx";
 import Milestone from "./pages/Milestone.jsx";
