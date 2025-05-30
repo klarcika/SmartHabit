@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useAuth, useUser } from '@clerk/clerk-react';
 import axios from 'axios';
 import { FaListAlt } from 'react-icons/fa';
+import { queueRequest, syncRequests } from "./../offlineSync.js";
 import './Habits.css';
 
 function Habit() {
@@ -12,30 +13,61 @@ function Habit() {
     const [error, setError] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [currentHabit, setCurrentHabit] = useState(null);
-    const [filterCategory, setFilterCategory] = useState(''); // State for category filter
+    const [filterCategory, setFilterCategory] = useState('');
+    const [isOnline, setIsOnline] = useState(navigator.onLine);
     const userId = user?.id;
 
     useEffect(() => {
-        const fetchHabits = async () => {
-            if (!isSignedIn) return;
+        const handleOnline = async () => {
+            setIsOnline(true);
+            await syncRequests(getToken);
+            fetchHabits();
+        };
+        const handleOffline = () => setIsOnline(false);
 
-            const token = await getToken();
+        window.addEventListener('online', handleOnline);
+        window.addEventListener('offline', handleOffline);
 
-            try {
+        return () => {
+            window.removeEventListener('online', handleOnline);
+            window.removeEventListener('offline', handleOffline);
+        };
+    }, []);
+
+    const fetchHabits = async () => {
+        if (!isSignedIn) return;
+
+        const token = await getToken();
+
+        try {
+            if (isOnline) {
                 const response = await axios.get("http://localhost:4000/api/habits", {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
-
                 setHabits(response.data);
-            } catch (error) {
-                console.error("Napaka pri pridobivanju navad:", error);
+            } else {
+                await queueRequest({
+                    method: 'GET',
+                    url: "http://localhost:4000/api/habits",
+                    headers: { Authorization: `Bearer ${token}` },
+                });
+                if ('serviceWorker' in navigator && 'SyncManager' in window) {
+                    navigator.serviceWorker.ready.then((registration) => {
+                        registration.sync.register('sync-habits');
+                    });
+                }
             }
-        };
+        } catch (error) {
+            console.error("Napaka pri pridobivanju navad:", error);
+            setError("Napaka pri pridobivanju navad. Poskusite znova.");
+        }
+    };
 
+    useEffect(() => {
         fetchHabits();
-    }, [isSignedIn]);
+    }, [isSignedIn, isOnline]);
 
     const handleAddHabit = async (e) => {
         e.preventDefault();
@@ -50,32 +82,54 @@ function Habit() {
             goal: formData.get('goal'),
             user: userId,
         };
+        const url = isEditing ? `http://localhost:4000/api/habits/${currentHabit._id}` : "http://localhost:4000/api/habits";
+        const method = isEditing ? 'PUT' : 'POST';
 
         try {
             let response;
-            if (isEditing) {
-                response = await axios.put(`http://localhost:4000/api/habits/${currentHabit._id}`, newHabitData, {
+            if (isOnline) {
+                response = await axios({
+                    method: method,
+                    url: url,
+                    data: newHabitData,
                     headers: {
                         Authorization: `Bearer ${token}`,
                         'Content-Type': 'application/json',
                     },
                 });
-                setHabits(habits.map((habit) => (habit._id === currentHabit._id ? response.data : habit)));
+
+                if (isEditing) {
+                    setHabits(habits.map((habit) => (habit._id === currentHabit._id ? response.data : habit)));
+                } else {
+                    setHabits([...habits, response.data]);
+                }
             } else {
-                response = await axios.post("http://localhost:4000/api/habits", newHabitData, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        'Content-Type': 'application/json',
-                    },
+                await queueRequest({
+                    method: method,
+                    url: url,
+                    body: newHabitData,
                 });
-                setHabits([...habits, response.data]);
+
+                if (isEditing) {
+                    setHabits(habits.map((habit) => (habit._id === currentHabit._id ? { ...habit, ...newHabitData } : habit)));
+                } else {
+                    const tempHabit = { ...newHabitData, _id: Date.now().toString(), createdAt: new Date() };
+                    setHabits([...habits, tempHabit]);
+                }
+
+                if ('serviceWorker' in navigator && 'SyncManager' in window) {
+                    navigator.serviceWorker.ready.then((registration) => {
+                        registration.sync.register('sync-habits');
+                    });
+                }
             }
+
             setIsModalOpen(false);
             setIsEditing(false);
             setCurrentHabit(null);
             e.target.reset();
             setError(null);
-            console.log(isEditing ? "Navada posodobljena:" : "Navada dodana:", response.data);
+            console.log(isEditing ? "Navada posodobljena:" : "Navada dodana:", response?.data || newHabitData);
         } catch (error) {
             console.error(isEditing ? "Napaka pri posodabljanju navade:" : "Napaka pri dodajanju navade:", error);
             setError(isEditing ? "Napaka pri posodabljanju navade. Poskusite znova." : "Napaka pri shranjevanju navade. Poskusite znova.");
@@ -86,13 +140,28 @@ function Habit() {
         if (!isSignedIn) return;
 
         const token = await getToken();
+        const url = `http://localhost:4000/api/habits/${habitId}`;
 
         try {
-            await axios.delete(`http://localhost:4000/api/habits/${habitId}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
+            if (isOnline) {
+                await axios.delete(url, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+            } else {
+                await queueRequest({
+                    method: 'DELETE',
+                    url: url,
+                });
+
+                if ('serviceWorker' in navigator && 'SyncManager' in window) {
+                    navigator.serviceWorker.ready.then((registration) => {
+                        registration.sync.register('sync-habits');
+                    });
+                }
+            }
+
             setHabits(habits.filter((habit) => habit._id !== habitId));
             console.log("Navada izbrisana:", habitId);
         } catch (error) {
@@ -114,7 +183,6 @@ function Habit() {
         setError(null);
     };
 
-    // Filter habits based on selected category
     const filteredHabits = filterCategory
         ? habits.filter((habit) => habit.category === filterCategory)
         : habits;
@@ -122,10 +190,9 @@ function Habit() {
     return (
         <div className="habit-page-wrapper">
             <div className="habit-container">
-                <h2><FaListAlt className="icon" /> Moje navade</h2>
+                <h2><FaListAlt className="icon" /> Moje navade {isOnline ? '' : '(Offline)'}</h2>
                 <button className="add-habit-button" onClick={() => setIsModalOpen(true)}>Dodaj navado</button>
 
-                {/* Filter dropdown */}
                 <div className="filter-container">
                     <label htmlFor="filter-category">Filtriraj po kategoriji:</label>
                     <select
@@ -166,7 +233,6 @@ function Habit() {
                     </div>
                 )}
 
-                {/* Modal */}
                 <div className={`modal ${isModalOpen ? 'active' : ''}`}>
                     <div className="modal-content">
                         <button className="close-button" onClick={() => setIsModalOpen(false)}>×</button>
