@@ -30,12 +30,12 @@ function Header() {
           navigate('/habits');
           speak('Pomikam se na stran Navade');
         },
-        'pojdi na mejnike': () => {
-          navigate('/milestone');
-          speak('Pomikam se na stran Mejniki');
+        'pojdi na napredek': () => {
+          navigate('/achivements');
+          speak('Pomikam se na stran Napredek');
         },
         'pojdi na dosežke': () => {
-          navigate('/achivements');
+          navigate('/milestone');
           speak('Pomikam se na stran Dosežki');
         },
         'pojdi na lestvico': () => {
