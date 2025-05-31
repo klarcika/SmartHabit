@@ -5,7 +5,7 @@ import Header from "./pages/Header.jsx";
 import Habits from "./pages/Habits.jsx";
 import Achievements from "./pages/Achivement.jsx";
 import Milestone from "./pages/Milestone.jsx";
-import Leaderboard from "./pages/Leaderboard.jsx";
+import Leaderboard from "./pages/leaderboard.jsx";
 
 
 function App() {

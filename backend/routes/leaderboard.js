@@ -1,22 +1,33 @@
 const express = require('express');
 const router = express.Router();
-const Habit = require('../models/Habit');
-const User = require('../models/User');
+const Milestone = require('../models/Milestone');
 
-router.get('/', async (req, res) => {
+
+router.get('/milestone', async (req, res) => {
   try {
-    const data = await Habit.aggregate([
+    const data = await Milestone.aggregate([
+      {
+        $match: {
+          type: { $in: ['full', 'half'] } 
+        }
+      },
       {
         $group: {
           _id: "$user",
-          totalHabits: { $sum: 1 }
+          points: {
+            $sum: {
+              $cond: [
+                { $eq: ["$type", "full"] }, 2, 1 
+              ]
+            }
+          }
         }
       },
       {
         $lookup: {
-          from: "users",
-          localField: "_id",
-          foreignField: "clerkId", 
+          from: "users",            
+          localField: "_id",          
+          foreignField: "clerkId",    
           as: "userData"
         }
       },
@@ -27,11 +38,11 @@ router.get('/', async (req, res) => {
         $project: {
           name: "$userData.name",
           email: "$userData.email",
-          totalHabits: 1
+          points: 1
         }
       },
       {
-        $sort: { totalHabits: -1 }
+        $sort: { points: -1 }
       },
       {
         $limit: 10
@@ -40,8 +51,8 @@ router.get('/', async (req, res) => {
 
     res.json(data);
   } catch (error) {
-    console.error("Napaka pri leaderboardu:", error);
-    res.status(500).json({ message: "Napaka pri pridobivanju leaderboarda." });
+    console.error("Napaka pri milestone leaderboardu:", error);
+    res.status(500).json({ message: "Napaka pri milestone leaderboardu." });
   }
 });
 

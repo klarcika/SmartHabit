@@ -154,3 +154,21 @@ pre {
   background: #4f8bff !important;
   color: #fff !important;
 }
+.react-calendar__navigation {
+  background-color: #2a2a2a;
+  color: #f1f1f1;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.react-calendar__navigation button {
+  color: #f1f1f1;
+  font-weight: bold;
+  background: transparent;
+  border: none;
+  font-size: 1rem;
+}
+
+.react-calendar__navigation button:disabled {
+  color: #888;
+}

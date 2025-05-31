@@ -114,24 +114,42 @@ function ProfilePage() {
   };
 
   const generateHabitDates = (habit) => {
-    const dates = [];
-    const today = new Date();
-    const end = new Date();
-    end.setMonth(today.getMonth() + 1);
+  const dates = [];
+  const today = new Date();
+  let count = 0;
+  let current = new Date(today);
 
-    for (let d = new Date(today); d <= end; d.setDate(d.getDate() + 1)) {
-      const current = new Date(d);
-      if (habit.frequency === 'daily') {
-        dates.push(new Date(current));
-      } else if (habit.frequency === 'weekly' && current.getDay() === 1) {
-        dates.push(new Date(current));
-      } else if (habit.frequency === 'monthly' && current.getDate() === 1) {
-        dates.push(new Date(current));
+  while (count < habit.goal) {
+    if (habit.frequency === 'daily') {
+      dates.push(new Date(current));
+      current.setDate(current.getDate() + 1);
+      count++;
+    } else if (habit.frequency === 'weekly') {
+      // dodaj samo ponedeljke
+      while (current.getDay() !== 1) {
+        current.setDate(current.getDate() + 1);
       }
+      dates.push(new Date(current));
+      current.setDate(current.getDate() + 7);
+      count++;
+    } else if (habit.frequency === 'monthly') {
+      if (current.getDate() !== 1) {
+        current.setDate(1);
+        if (current < today) {
+          current.setMonth(current.getMonth() + 1);
+        }
+      }
+      dates.push(new Date(current));
+      current.setMonth(current.getMonth() + 1);
+      count++;
+    } else {
+      break;
     }
+  }
 
-    return dates;
-  };
+  return dates;
+};
+
 
   return (
       <div className="page-wrapper">
@@ -145,7 +163,7 @@ function ProfilePage() {
 
           {userData && (
               <div className="api-data">
-                <h3><FaDatabase className="icon" /> Podatki iz API-ja</h3>
+                <h3> Podatki</h3>
                 <p><strong>Email:</strong> {userData.email}</p>
                 <p><strong>Uporabniško ime:</strong> {userData.name}</p>
                 <p><strong>Ustvarjeno:</strong> {new Date(userData.createdAt).toLocaleString('sl-SI')}</p>
