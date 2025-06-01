@@ -25,7 +25,7 @@
 📁 frontend/
 │
 ├── index.html
-├── pages/
+├── components/
 │ ├── home.html
 │ └── user.html
 ├── js/
