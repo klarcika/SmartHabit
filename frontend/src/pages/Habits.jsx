@@ -18,6 +18,9 @@ function Habit() {
     const userId = user?.id;
 
     useEffect(() => {
+        if ('Notification' in window && Notification.permission !== 'granted') {
+            Notification.requestPermission();
+        }
         const handleOnline = async () => {
             setIsOnline(true);
             await syncRequests(getToken);
@@ -36,7 +39,6 @@ function Habit() {
 
     const fetchHabits = async () => {
         if (!isSignedIn) return;
-
         const token = await getToken();
 
         try {
@@ -130,6 +132,14 @@ function Habit() {
             e.target.reset();
             setError(null);
             console.log(isEditing ? "Navada posodobljena:" : "Navada dodana:", response?.data || newHabitData);
+            if (!isEditing && Notification.permission === 'granted' && 'serviceWorker' in navigator) {
+                navigator.serviceWorker.ready.then((registration) => {
+                    registration.showNotification('Nova navada dodana!', {
+                        body: `${newHabitData.name} je bila uspešno dodana.`,
+                    });
+                });
+            }
+
         } catch (error) {
             console.error(isEditing ? "Napaka pri posodabljanju navade:" : "Napaka pri dodajanju navade:", error);
             setError(isEditing ? "Napaka pri posodabljanju navade. Poskusite znova." : "Napaka pri shranjevanju navade. Poskusite znova.");
@@ -138,7 +148,6 @@ function Habit() {
 
     const handleDeleteHabit = async (habitId) => {
         if (!isSignedIn) return;
-
         const token = await getToken();
         const url = `http://localhost:4000/api/habits/${habitId}`;
 
