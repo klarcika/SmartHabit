@@ -94,20 +94,20 @@ function Milestones() {
     };
 
     const filterMilestones = (milestones) => {
-    const habitMap = new Map();
+        const habitMap = new Map();
 
-    milestones.forEach((milestone) => {
-        const habitId = milestone.habit._id;
+        milestones.forEach((milestone) => {
+            if (!milestone.habit) return; 
 
-        const existing = habitMap.get(habitId);
-        if (!existing || (existing.type === 'half' && milestone.type === 'full')) {
-            habitMap.set(habitId, milestone);
-        }
-    });
+            const habitId = milestone.habit?._id;
+            const existing = habitMap.get(habitId);
+            if (!existing || (existing.type === 'half' && milestone.type === 'full')) {
+                habitMap.set(habitId, milestone);
+            }
+        });
 
-    return Array.from(habitMap.values());
-};
-
+        return Array.from(habitMap.values());
+    };
 
     return (
         <div className="habit-page-wrapper">
@@ -119,8 +119,10 @@ function Milestones() {
                 ) : (
                     <div className="habit-list">
                         {filterMilestones(milestones).map((milestone) => {
-                            const points = milestone.habit.points || 0;
-                            const goal = milestone.habit.goal || 1;
+                            if (!milestone.habit) return null; 
+
+                            const points = milestone.habit?.points || 0;
+                            const goal = milestone.habit?.goal || 1;
                             const progress = (points / goal) * 100;
                             const title = getMilestoneTitle(milestone.type);
 

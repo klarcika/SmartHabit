@@ -173,6 +173,14 @@ function Habit() {
 
             setHabits(habits.filter((habit) => habit._id !== habitId));
             console.log("Navada izbrisana:", habitId);
+            if ('Notification' in window && Notification.permission === 'granted' && 'serviceWorker' in navigator) {
+                navigator.serviceWorker.ready.then((registration) => {
+                    registration.showNotification('Navada izbrisana', {
+                        body: `Navada je bila uspešno izbrisana.`,
+                    });
+                });
+            }
+
         } catch (error) {
             console.error("Napaka pri brisanju navade:", error);
             setError("Napaka pri brisanju navade. Poskusite znova.");
