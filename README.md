@@ -57,7 +57,7 @@ json-server --watch db.json --port 3001
 ```bash
 npx http-server . -p 5500
 ```
-### Odpri aplikavijo v brskalniku
+### Odpri aplikacijo v brskalniku
 ```bash
 http://localhost:5500/pages/home.html
 ```
@@ -90,3 +90,4 @@ http://localhost:5500/pages/home.html
 ### Avtorji
 ...
 Projekt za: Spletne tehnologije – šolsko leto 2024/25
+Klara Kirbiš, Elena Ugwoegbulam Bežan, Vivien Štampfer
