@@ -31,6 +31,6 @@ app.use('/api/achievements', achievementRoutes);
 app.use('/api/milestones', milestoneRoutes);
 app.use('/api/leaderboard', leaderboardRoutes);
 
-const PORT = process.env.PORT || 4000;
+// const PORT = process.env.PORT || 4000;
 // app.listen(PORT, () => console.log(`Strežnik teče na ${PORT}`));
 module.exports = app;
