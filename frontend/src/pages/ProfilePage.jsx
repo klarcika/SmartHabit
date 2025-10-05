@@ -7,6 +7,10 @@ import 'react-calendar/dist/Calendar.css';
 import { queueRequest, syncRequests } from "./../offlineSync.js";
 import './ProfilePage.css';
 
+const API = (import.meta.env && import.meta.env.VITE_API_URL) ? import.meta.env.VITE_API_URL : '/api';
+// dev:  http://localhost:4000
+// prod: /api  (isti origin na Vercelu)
+
 function ProfilePage() {
   const { getToken, isSignedIn } = useAuth();
   const { user } = useUser();
@@ -45,14 +49,14 @@ function ProfilePage() {
 
     try {
       if (isOnline) {
-        const response = await axios.get("http://localhost:4000/api/users/", {
+        const response = await axios.get(`${API}/api/users/`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUserData(response.data);
       } else {
         await queueRequest({
           method: 'GET',
-          url: "http://localhost:4000/api/users/",
+          url: `${API}/api/users/`,
           headers: { Authorization: `Bearer ${token}` },
         });
         if ('serviceWorker' in navigator && 'SyncManager' in window) {
@@ -72,7 +76,7 @@ function ProfilePage() {
 
     try {
       if (isOnline) {
-        const response = await axios.get("http://localhost:4000/api/habits", {
+        const response = await axios.get(`${API}/api/habits`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -99,7 +103,7 @@ function ProfilePage() {
       } else {
         await queueRequest({
           method: 'GET',
-          url: "http://localhost:4000/api/habits",
+          url: `${API}/api/habits`,
           headers: { Authorization: `Bearer ${token}` },
         });
         if ('serviceWorker' in navigator && 'SyncManager' in window) {
@@ -114,91 +118,89 @@ function ProfilePage() {
   };
 
   const generateHabitDates = (habit) => {
-  const dates = [];
-  const today = new Date();
-  let count = 0;
-  let current = new Date(today);
+    const dates = [];
+    const today = new Date();
+    let count = 0;
+    let current = new Date(today);
 
-  while (count < habit.goal) {
-    if (habit.frequency === 'daily') {
-      dates.push(new Date(current));
-      current.setDate(current.getDate() + 1);
-      count++;
-    } else if (habit.frequency === 'weekly') {
-      // dodaj samo ponedeljke
-      while (current.getDay() !== 1) {
+    while (count < habit.goal) {
+      if (habit.frequency === 'daily') {
+        dates.push(new Date(current));
         current.setDate(current.getDate() + 1);
-      }
-      dates.push(new Date(current));
-      current.setDate(current.getDate() + 7);
-      count++;
-    } else if (habit.frequency === 'monthly') {
-      if (current.getDate() !== 1) {
-        current.setDate(1);
-        if (current < today) {
-          current.setMonth(current.getMonth() + 1);
+        count++;
+      } else if (habit.frequency === 'weekly') {
+        while (current.getDay() !== 1) {
+          current.setDate(current.getDate() + 1);
         }
+        dates.push(new Date(current));
+        current.setDate(current.getDate() + 7);
+        count++;
+      } else if (habit.frequency === 'monthly') {
+        if (current.getDate() !== 1) {
+          current.setDate(1);
+          if (current < today) {
+            current.setMonth(current.getMonth() + 1);
+          }
+        }
+        dates.push(new Date(current));
+        current.setMonth(current.getMonth() + 1);
+        count++;
+      } else {
+        break;
       }
-      dates.push(new Date(current));
-      current.setMonth(current.getMonth() + 1);
-      count++;
-    } else {
-      break;
     }
-  }
 
-  return dates;
-};
-
+    return dates;
+  };
 
   return (
-      <div className="page-wrapper">
-        <div className="profile-container">
-          {user?.imageUrl && (
-              <img src={user.imageUrl} alt="Profilna slika" className="avatar" />
-          )}
+    <div className="page-wrapper">
+      <div className="profile-container">
+        {user?.imageUrl && (
+          <img src={user.imageUrl} alt="Profilna slika" className="avatar" />
+        )}
 
-          <h2><FaUser className="icon" /> Profilna stran {isOnline ? '' : '(Offline)'}</h2>
-          <p><strong>Ime:</strong> {user?.firstName} {user?.lastName}</p>
+        <h2><FaUser className="icon" /> Profilna stran {isOnline ? '' : '(Offline)'}</h2>
+        <p><strong>Ime:</strong> {user?.firstName} {user?.lastName}</p>
 
-          {userData && (
-              <div className="api-data">
-                <h3> Podatki</h3>
-                <p><strong>Email:</strong> {userData.email}</p>
-                <p><strong>Uporabniško ime:</strong> {userData.name}</p>
-                <p><strong>Ustvarjeno:</strong> {new Date(userData.createdAt).toLocaleString('sl-SI')}</p>
-              </div>
-          )}
-
-          <div className="calendar-section">
-            <h3>Koledar navad</h3>
-            <Calendar
-                tileContent={({ date }) => {
-                  const key = date.toDateString();
-                  return habitDateMap[key]?.map((habit, idx) => (
-                      <div
-                          key={idx}
-                          style={{
-                            backgroundColor: habitColorMap[habit],
-                            color: 'white',
-                            fontSize: '0.6rem',
-                            borderRadius: '4px',
-                            padding: '2px 4px',
-                            margin: '1px 0',
-                            textAlign: 'center',
-                            overflow: 'hidden',
-                            whiteSpace: 'nowrap',
-                            textOverflow: 'ellipsis'
-                          }}
-                      >
-                        {habit}
-                      </div>
-                  ));
-                }}
-            />
+        {userData && (
+          <div className="api-data">
+            <h3> Podatki</h3>
+            <p><strong>Email:</strong> {userData.email}</p>
+            <p><strong>Uporabniško ime:</strong> {userData.name}</p>
+            <p><strong>Ustvarjeno:</strong> {new Date(userData.createdAt).toLocaleString('sl-SI')}</p>
           </div>
+        )}
+
+        <div className="calendar-section">
+          <h3>Koledar navad</h3>
+          <Calendar
+            tileContent={({ date }) => {
+              const key = date.toDateString();
+              return habitDateMap[key]?.map((habit, idx) => (
+                <div
+                  key={idx}
+                  style={{
+                    backgroundColor: habitColorMap[habit],
+                    color: 'white',
+                    fontSize: '0.6rem',
+                    borderRadius: '4px',
+                    padding: '2px 4px',
+                    margin: '1px 0',
+                    textAlign: 'center',
+                    overflow: 'hidden',
+                    whiteSpace: 'nowrap',
+                    textOverflow: 'ellipsis'
+                  }}
+                >
+                  {habit}
+                </div>
+              ));
+            }}
+          />
         </div>
       </div>
+    </div>
   );
 }
 
