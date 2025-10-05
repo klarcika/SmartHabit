@@ -6,7 +6,7 @@ import Header from "./pages/Header.jsx";
 import Habits from "./pages/Habits.jsx";
 import Achievements from "./pages/Achivement.jsx";
 import Milestones from "./pages/Milestone.jsx";
-import Leaderboard from "./pages/leaderboard.jsx";
+import Leaderboard from "./pages/Leaderboard.jsx";
 
 function App() {
 useEffect(() => {
