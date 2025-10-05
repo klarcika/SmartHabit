@@ -10,7 +10,6 @@ const getOrCreateUser = async (req, res) => {
       user = await User.create({
         clerkId,
         email: userEmail,
-        name: userName,
       });
     }
 
@@ -22,12 +21,10 @@ const getOrCreateUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   const { clerkId } = req;
-  const { name } = req.body;
 
   try {
     const user = await User.findOneAndUpdate(
       { clerkId },
-      { name },
       { new: true }
     );
 
