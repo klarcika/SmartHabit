@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { SignedIn, SignedOut, SignInButton, UserButton, useUser, useAuth } from '@clerk/clerk-react';
 import axios from "axios";
-import './homepage.css';
+import './Homepage.css';
 
 function HomePage() {
   const { user } = useUser();
